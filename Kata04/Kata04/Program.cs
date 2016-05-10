@@ -17,11 +17,22 @@ namespace Kata04
             Console.WriteLine("Let's MUNGE some data!!");
             Console.WriteLine("****************************************************************");
 
+            DataProcessor processor = null;
+
             try
             {
                 dataPath = GetPathToFile();
-                inputData = WeatherProcessor.ParseDataFile(dataPath);
-                Console.WriteLine(WeatherProcessor.EvaluateData(inputData));
+                switch (GetProcessingSelection())
+                {
+                    case "w":
+                        processor = new WeatherProcessor();
+                        break;
+                    case "f":
+                        processor = new FootballProcessor();
+                        break;
+                }
+                inputData = processor.ParseDataFile(dataPath);
+                Console.WriteLine(processor.EvaluateData(inputData));
             }
             catch (Exception e)
             {
@@ -46,6 +57,27 @@ namespace Kata04
             } while (inputIsInvalid);
 
             return dataPath;
+        }
+
+        private static string GetProcessingSelection()
+        {
+            string selection = null;
+            bool inputIsInvalid = false;
+
+            do
+            {
+                Console.WriteLine("Please type of processing:");
+                Console.WriteLine("(W)eather Processing");
+                Console.WriteLine("(F)ootball Processing");
+                Console.Write("Please enter 'W' or 'F': ");
+                selection = Console.ReadLine();
+                if (inputIsInvalid = (selection.ToLower() != "w" && selection.ToLower() != "f"))
+                {
+                    Console.WriteLine("Please enter 'W' or 'F'!");
+                }
+            } while (inputIsInvalid);
+
+            return selection.ToLower();
         }
     }
 }
